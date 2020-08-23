@@ -2,7 +2,10 @@ package club.rongyue.remoting.transport.socket;
 
 import club.rongyue.entity.RpcServiceProperties;
 import club.rongyue.provider.ServiceProvider;
+import club.rongyue.provider.ServiceProviderImpl;
 import club.rongyue.utils.GlobalVariable;
+import club.rongyue.utils.concurrent.threadpool.ThreadPoolFactoryUtils;
+import club.rongyue.utils.factories.SingletonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +27,8 @@ public class SocketRpcServer {
     private final ServiceProvider serviceProvider;
 
     public SocketRpcServer(){
-        threadPool = null;
-        serviceProvider = null;
+        threadPool = ThreadPoolFactoryUtils.createCustomThreadPool("socket-server-rpc-pool");
+        serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
     }
 
     /**
@@ -33,16 +36,16 @@ public class SocketRpcServer {
      * @param service 接口实现类（即服务）
      */
     public void registryService(Object service){
-
+        serviceProvider.publishService(service);
     }
 
     /**
      * 注册服务，将服务注册到注册中心（当一个接口有多个实现类时，使用这个注册方法）
      * @param service 接口实现类（即服务）
-     * @param rpcServiceProperties 服务的其他信息（group，version，serviceName）
+     * @param rpcServiceProperties 服务的其他信息（group，version，serviceName,用于区分同一个接口的不同实现类）
      */
     public void registryService(Object service , RpcServiceProperties rpcServiceProperties){
-
+        serviceProvider.publishService(service , rpcServiceProperties);
     }
 
     /**

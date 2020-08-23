@@ -15,9 +15,12 @@
 
     <properties>
         <encoding>UTF-8</encoding>
+        <guava.version>29.0-jre</guava.version>
         <!-- logging -->
         <log4j.version>2.9.0</log4j.version>
         <slf4j.version>1.7.25</slf4j.version>
+
+
     </properties>
 
     <dependencies>
@@ -31,6 +34,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
 

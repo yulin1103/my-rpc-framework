@@ -3,6 +3,7 @@ package club.rongyue.remoting.transport.socket;
 import club.rongyue.remoting.dto.RpcRequest;
 import club.rongyue.remoting.dto.RpcResponse;
 import club.rongyue.remoting.handler.RpcRequestHandler;
+import club.rongyue.utils.factories.SingletonFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,7 @@ public class SocketRpcRequestHandlerRunnable implements Runnable{
 
     public SocketRpcRequestHandlerRunnable(Socket socket){
         this.socket = socket;
-        this.rpcRequestHandler = null;
+        this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
     }
 
     @Override
