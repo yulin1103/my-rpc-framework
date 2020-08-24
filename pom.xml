@@ -11,16 +11,22 @@
     <modules>
         <module>test-code</module>
         <module>rpc-framework-component</module>
+        <module>service-interface</module>
+        <module>service-provider</module>
+        <module>service-consumer</module>
     </modules>
 
     <properties>
         <encoding>UTF-8</encoding>
+        <!-- 获取线程工厂类ThreadFactory-->
         <guava.version>29.0-jre</guava.version>
         <!-- logging -->
         <log4j.version>2.9.0</log4j.version>
         <slf4j.version>1.7.25</slf4j.version>
-
-
+        <!-- Curator -->
+        <curator.version>4.2.0</curator.version>
+        <!-- Zookeeper-->
+        <zookeeeper.version>3.4.11</zookeeeper.version>
     </properties>
 
     <dependencies>
@@ -42,6 +48,58 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-    </dependencies>
 
+        <!--curator-framework对zookeeper的底层api的一些封装-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>${curator.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- curator-recipes：封装了一些高级特性，如：Cache事件监听、选举、分布式锁、分布式计数器、分布式Barrier等-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- zookeeper-->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>${zookeeeper.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 </project>

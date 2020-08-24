@@ -3,6 +3,7 @@ package club.rongyue.provider;
 import club.rongyue.entity.RpcServiceProperties;
 
 /**
+ * 服务生产者（提供服务的一方）
  * 保存服务到容器（Set、Map）中，并将服务的IP地址和端口号注册到注册中心
  * @author yulin
  * @createTime 2020-08-22 20:41
@@ -25,15 +26,15 @@ public interface ServiceProvider {
     Object getService(RpcServiceProperties rpcServiceProperties);
 
     /**
+     * 发布服务
+     * @param service 服务对象（即接口实现类的对象）
+     */
+    void publishService(Object service);
+
+    /**
      * 服务端发布服务。将服务的IP地址和端口号注册到注册中心
      * @param service 服务对象（即接口实现类的对象）
      * @param rpcServiceProperties 服务对象属性（用于区分同一个接口的不同实现类）
      */
     void publishService(Object service , RpcServiceProperties rpcServiceProperties);
-
-    /**
-     * 发布服务
-     * @param service 服务对象（即接口实现类的对象）
-     */
-    void publishService(Object service);
 }

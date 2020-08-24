@@ -2,6 +2,8 @@ package club.rongyue.remoting.transport.socket;
 
 import club.rongyue.entity.RpcServiceProperties;
 import club.rongyue.exception.RpcException;
+import club.rongyue.registry.ServiceDiscovery;
+import club.rongyue.registry.zk.ZkServiceDiscovery;
 import club.rongyue.remoting.dto.RpcRequest;
 import club.rongyue.remoting.transport.ClientTransport;
 import org.slf4j.Logger;
@@ -20,6 +22,11 @@ import java.net.Socket;
  */
 public class SocketRpcClient implements ClientTransport {
     private static final Logger logger = LoggerFactory.getLogger(SocketRpcClient.class);
+    private final ServiceDiscovery serviceDiscovery;
+
+    public SocketRpcClient(){
+        serviceDiscovery = new ZkServiceDiscovery();
+    }
 
     @Override
     public Object sendRpcRequest(RpcRequest rpcRequest) {
@@ -27,7 +34,7 @@ public class SocketRpcClient implements ClientTransport {
         RpcServiceProperties rpcServiceProperties = rpcRequest.getRpcServiceProperties();
         String rpcServiceName = rpcServiceProperties.toRpcServiceName();
         //从注册中心找到该服务的位置
-        InetSocketAddress inetSocketAddress = null;
+        InetSocketAddress inetSocketAddress = serviceDiscovery.findService(rpcServiceName);
         logger.info("服务地址：" + inetSocketAddress.toString());
         Socket rpcClient = null;
         ObjectOutputStream oos = null;

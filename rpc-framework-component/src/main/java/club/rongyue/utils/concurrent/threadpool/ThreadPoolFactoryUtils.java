@@ -66,7 +66,7 @@ public class ThreadPoolFactoryUtils {
     }
 
     /**
-     * 创建一个线程工程，负责生产线程。可配置线程的一些属性（如线程名等）
+     * 创建一个线程工厂，负责生产线程。可配置线程的一些属性（如线程名等）
      *
      * @param threadNamePrefix 线程名前缀
      * @param isDaemon         指定是否为Daemon Thread（守护线程）
@@ -75,10 +75,10 @@ public class ThreadPoolFactoryUtils {
         if (threadNamePrefix != null) {
             if (isDaemon != null) {
                 //google的jre包
-                return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-d%")
+                return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d")
                         .setDaemon(isDaemon).build();
             } else {
-                return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-d%").build();
+                return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").build();
             }
         }
         //threadNamePrefix为空，使用默认的ThreadFactory
@@ -90,7 +90,7 @@ public class ThreadPoolFactoryUtils {
      *
      * @param threadPool 线程池对象
      */
-    public static void printThreadPoolStatus(ThreadPoolExecutor threadPool) {
+    public static void printThreadPoolStatus(final ThreadPoolExecutor threadPool) {
         //定时周期执行指定的任务
         ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1, createThreadFactory("print-thread-pool-status", false));
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
