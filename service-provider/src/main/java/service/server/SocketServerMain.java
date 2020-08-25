@@ -13,5 +13,6 @@ public class SocketServerMain {
         UserService userService = new UserServiceImpl();
         SocketRpcServer server = new SocketRpcServer();
         server.registryService(userService);
+        server.start();
     }
 }

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @createTime 2020-08-22 16:47
  */
 public class RpcResponse<T> implements Serializable {
-    private static final Long serialVersionUID = 1L;
+    private static final Long serialVersionUID = 2020199710044811L;
     private String rpcRequestId;
     /**
      * 响应状态码

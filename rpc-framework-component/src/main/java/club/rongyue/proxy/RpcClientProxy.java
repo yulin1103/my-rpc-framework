@@ -37,8 +37,9 @@ public class RpcClientProxy<T> implements InvocationHandler {
         this.rpcServiceProperties = rpcServiceProperties;
     }
 
-    public <T> T getProxy(Class<T> clazz){
-        return clazz.cast(Proxy.newProxyInstance(this.getClass().getClassLoader() , clazz.getInterfaces() , this));
+    public T getProxy(Class<T> clazz){
+        logger.info("调用服务的接口名称: [{}]" , clazz.getName());
+        return clazz.cast(Proxy.newProxyInstance(this.getClass().getClassLoader() , new Class<?>[]{clazz} , this));
     }
 
     @Override
@@ -53,9 +54,11 @@ public class RpcClientProxy<T> implements InvocationHandler {
         rpcRequest.setGroup(rpcServiceProperties.getGroup());
         rpcRequest.setVersion(rpcServiceProperties.getVersion());
         RpcResponse<Object> rpcResponse = null;
+        Object obj = null;
         if (clientTransport instanceof SocketRpcClient){
+            logger.info("通过Socket传输数据");
             rpcResponse = (RpcResponse<Object>) clientTransport.sendRpcRequest(rpcRequest);
         }
-        return rpcResponse;
+        return rpcResponse.getData();
     }
 }

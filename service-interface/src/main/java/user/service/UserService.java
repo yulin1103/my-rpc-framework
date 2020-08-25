@@ -1,5 +1,7 @@
 package user.service;
 
+import user.service.pojo.User;
+
 import java.util.List;
 
 /**
@@ -11,5 +13,5 @@ public interface UserService {
      * 通过userId获取用户信息
      * @param userId 用户id
      */
-    List<Object> getUser(int userId);
+    List<User> getUser(int userId);
 }

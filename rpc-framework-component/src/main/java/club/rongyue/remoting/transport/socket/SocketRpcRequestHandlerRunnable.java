@@ -44,10 +44,13 @@ public class SocketRpcRequestHandlerRunnable implements Runnable{
             RpcRequest rpcRequest = (RpcRequest) ois.readObject();
             //处理客户端的请求，并返回结果
             Object result = rpcRequestHandler.handle(rpcRequest);
+            logger.info("服务端返回给客户端的结果：[{}]" , result);
             //将处理结果传输回客户端
             oos.writeObject(RpcResponse.success(result , rpcRequest.getRequestId()));
+            logger.info("服务端成功将结果通过Socket返回");
             oos.flush();
         } catch (IOException | ClassNotFoundException e) {
+            logger.info("SocketRpcRequestHandlerRunnable抛出异常");
             e.printStackTrace();
         }finally {
             if (oos != null){

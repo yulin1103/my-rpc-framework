@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @createTime 2020-08-22 16:15
  */
 public class RpcRequest implements Serializable {
-    private static final Long serialVersionUID = 1L;
+    private static final Long serialVersionUID = 202010044810L;
     private String requestId;
     /**
      * 服务接口名（非全名）

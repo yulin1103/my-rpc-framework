@@ -1,12 +1,19 @@
-package pojo;
+package user.service.pojo;
+
+import java.io.Serializable;
 
 /**
  * @author yulin
- * @createTime 2020-08-24 23:38
+ * @createTime 2020-08-25 9:55
  */
-public class User {
+public class User implements Serializable {
+    private static final Long serialVersionUID = 202008250730L;
     private int id;
     private String name;
+
+    public User(){
+
+    }
 
     public User(int id, String name) {
         this.id = id;
