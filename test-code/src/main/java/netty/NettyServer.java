@@ -1,4 +1,4 @@
-package netty.rpc;
+package netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -50,6 +50,7 @@ public class NettyServer {
                     //表示系统用于临时存放已完成三次握手的请求的队列的最大长度,如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
                     .option(ChannelOption.SO_BACKLOG , 128)
                     .handler(new LoggingHandler(LogLevel.INFO))
+                    //当客户端第一次进行请求的时候才会进行初始化
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {

@@ -1,4 +1,4 @@
-package netty.rpc;
+package netty;
 
 /**
  * 自定义序列化、反序列化接口

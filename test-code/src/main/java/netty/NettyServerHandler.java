@@ -1,4 +1,4 @@
-package netty.rpc;
+package netty;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -29,7 +29,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             //打印来自客户端的消息
             log.info("server receive msg: [{}]" , rpcRequest.toString());
             RpcResponse rpcResponse = new RpcResponse();
-            //向客户端发送回复消息
+            //向客户端回复消息
             rpcResponse.setMessage("message from server");
             ChannelFuture channelFuture = ctx.writeAndFlush(rpcResponse);
             channelFuture.addListener(ChannelFutureListener.CLOSE);

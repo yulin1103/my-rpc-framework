@@ -1,4 +1,4 @@
-package cglib2proxy;
+package cglib;
 
 import net.sf.cglib.proxy.Enhancer;
 

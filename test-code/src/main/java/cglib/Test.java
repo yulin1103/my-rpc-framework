@@ -1,4 +1,4 @@
-package cglib2proxy;
+package cglib;
 
 /**
  * 测试类。需要被代理的类

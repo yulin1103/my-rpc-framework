@@ -1,4 +1,4 @@
-package netty.rpc;
+package netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -7,12 +7,15 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.TimeUnit;
+
 /**
- * 客户端，发送请求
+ * netty 客户端
  * @author yulin
  * @create 2020-08-15 15:18
  */
@@ -43,11 +46,12 @@ public class NettyClient {
                 //设置日志处理器
                 .handler(new LoggingHandler(LogLevel.INFO))
                 //连接超时时间。
-                // 如果15秒之内没有发送数据给服务端的话，就发送一次心跳请求
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS , 5000)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        //如果15秒之内没有发送数据给服务端的话，就发送一次心跳请求
+                        ch.pipeline().addLast(new IdleStateHandler(0 , 5 , 0 , TimeUnit.SECONDS));
                         //自定义编码器
                         ch.pipeline().addLast(new NettyEncoder2(RpcRequest.class , kryoSerializer));
                         //自定义解码器

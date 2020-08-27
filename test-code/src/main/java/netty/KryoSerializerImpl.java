@@ -1,4 +1,4 @@
-package netty.rpc;
+package netty;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;

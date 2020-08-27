@@ -1,4 +1,4 @@
-package netty.rpc;
+package netty;
 
 /**
  * @author yulin
