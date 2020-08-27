@@ -8,7 +8,7 @@ import club.rongyue.enumeration.RpcErrorMessage;
  */
 public class RpcException extends RuntimeException{
     public RpcException(RpcErrorMessage rpcErrorMessage , String detail){
-        super(rpcErrorMessage.getMessage() + ":" + detail);
+        super("服务：" + detail + " " + rpcErrorMessage.getMessage());
     }
 
     public RpcException(String message , Throwable e){

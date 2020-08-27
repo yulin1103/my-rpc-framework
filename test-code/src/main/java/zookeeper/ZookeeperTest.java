@@ -54,7 +54,7 @@ public class ZookeeperTest {
      */
     @Test
     public void getDataAndWatch() throws KeeperException, InterruptedException {
-        List<String> children = zkClient.getChildren("/", true);
+        List<String> children = zkClient.getChildren("/d", true);
         for (String str : children){
             log.info(str);
         }

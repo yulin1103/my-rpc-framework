@@ -35,7 +35,7 @@ public class SocketRpcRequestHandlerRunnable implements Runnable{
 
     @Override
     public void run() {
-        logger.info(Thread.currentThread().getName() + " 处理客户端的请求");
+        logger.info(Thread.currentThread().getName() + " 线程处理客户端的请求");
         ObjectInputStream ois = null;
         ObjectOutputStream oos = null;
         try {
@@ -69,6 +69,7 @@ public class SocketRpcRequestHandlerRunnable implements Runnable{
             }
             if (socket != null){
                 try {
+                    logger.info("调用socket.close()，关闭连接");
                     socket.close();
                 } catch (IOException e) {
                     e.printStackTrace();

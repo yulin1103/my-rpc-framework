@@ -47,7 +47,7 @@ public class SocketRpcClient implements ClientTransport {
             oos.writeObject(rpcRequest);
             logger.info("RpcRequest传输成功，目标地址：[{}]" , inetSocketAddress.toString());
             ois = new ObjectInputStream(rpcClient.getInputStream());
-            //会阻塞在这等待服务端传输数据过来。ois.readObject()可能会抛出 ClassNotFoundException异常
+            //会阻塞在这等待服务端传输数据过来。ois.readObject()可能会抛出 ClassNotFoundException异常（反序列化错误）
             return ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new RpcException("调用服务失败" , e);

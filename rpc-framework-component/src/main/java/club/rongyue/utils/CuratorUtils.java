@@ -103,6 +103,7 @@ public class CuratorUtils {
             }
             // servicePath == "/my-rpc/serviceName"
             String servicePath = ZK_PERSISTENT_NODE_ROOT_PATH + "/" + rpcServiceName;
+            //缓存不存在，从zookeeper获取。并保存到缓存中
             serviceAddressList = zkClient.getChildren().forPath(servicePath);
             SERVICE_ADDRESS_MAP.put(rpcServiceName , serviceAddressList);
             //监听子节点的变化
@@ -137,7 +138,10 @@ public class CuratorUtils {
         }
     }
 
-    public static void clearRegistry(CuratorFramework zkClient){
+    /**
+     * 删除节点（每次启动服务端时删除注册中心的旧数据）
+     */
+    public static void clearRegisteredService(CuratorFramework zkClient){
         //对于Set中的元素的操作都会以并行的方式执行
         REGISTERED_PATH_SET.stream().parallel().forEach(new Consumer<String>() {
             @Override

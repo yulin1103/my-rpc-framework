@@ -3,9 +3,11 @@ package club.rongyue.remoting.transport.socket;
 import club.rongyue.entity.RpcServiceProperties;
 import club.rongyue.provider.ServiceProvider;
 import club.rongyue.provider.ServiceProviderImpl;
+import club.rongyue.utils.CuratorUtils;
 import club.rongyue.utils.GlobalVariable;
 import club.rongyue.utils.concurrent.threadpool.ThreadPoolFactoryUtils;
 import club.rongyue.utils.factories.SingletonFactory;
+import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +59,9 @@ public class SocketRpcServer {
             //当前服务器的IP地址
             String host = InetAddress.getLocalHost().getHostAddress();
             rpcServer.bind(new InetSocketAddress(host , GlobalVariable.PORT));
-            //启动服务端时，清除注册中心的服务数据
-
+            //启动服务端时，清除注册中心旧的服务数据（旧服务地址不再提供的话，客户会调用失败）
+            CuratorFramework zkClient = CuratorUtils.getZkClient();
+            CuratorUtils.clearRegisteredService(zkClient);
             Socket socket = null;
             //accept()是一个阻塞方法，等待客户端的连接请求
             while ((socket = rpcServer.accept()) != null){

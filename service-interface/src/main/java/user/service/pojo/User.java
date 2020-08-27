@@ -3,6 +3,7 @@ package user.service.pojo;
 import java.io.Serializable;
 
 /**
+ * 服务提供者、服务消费者都需要用到这个类
  * @author yulin
  * @createTime 2020-08-25 9:55
  */

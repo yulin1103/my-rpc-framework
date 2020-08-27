@@ -9,5 +9,5 @@ public class GlobalVariable {
     /**
      * 服务端开放的端口
      */
-    public static final int PORT = 9998;
+    public static final int PORT = 19999;
 }

@@ -5,10 +5,8 @@ import club.rongyue.exception.RpcException;
 import club.rongyue.registry.ServiceDiscovery;
 import club.rongyue.utils.CuratorUtils;
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.zookeeper.data.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.rmi.runtime.Log;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -29,8 +27,11 @@ public class ZkServiceDiscovery implements ServiceDiscovery {
     @Override
     public InetSocketAddress findService(String rpcServiceName) {
         CuratorFramework zkClient = CuratorUtils.getZkClient();
-        List<String> serviceAddressList = CuratorUtils.getChildrenNodes(zkClient , rpcServiceName);
-        if (serviceAddressList.size() == 0){
+        List<String> serviceAddressList = null;
+        // 当路径不存在时，获取子节点将抛出 org.apache.zookeeper.KeeperException$NoNodeException 异常
+        try {
+            serviceAddressList = CuratorUtils.getChildrenNodes(zkClient , rpcServiceName);
+        } catch (Exception e) {
             //找不到这个服务
             throw new RpcException(RpcErrorMessage.SERVICE_CANNOT_BE_FOUND , rpcServiceName);
         }

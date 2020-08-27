@@ -1,6 +1,7 @@
 package club.rongyue.proxy;
 
 import club.rongyue.entity.RpcServiceProperties;
+import club.rongyue.remoting.dto.RpcMessageChecker;
 import club.rongyue.remoting.dto.RpcRequest;
 import club.rongyue.remoting.dto.RpcResponse;
 import club.rongyue.remoting.transport.ClientTransport;
@@ -38,7 +39,6 @@ public class RpcClientProxy<T> implements InvocationHandler {
     }
 
     public T getProxy(Class<T> clazz){
-        logger.info("调用服务的接口名称: [{}]" , clazz.getName());
         return clazz.cast(Proxy.newProxyInstance(this.getClass().getClassLoader() , new Class<?>[]{clazz} , this));
     }
 
@@ -54,11 +54,14 @@ public class RpcClientProxy<T> implements InvocationHandler {
         rpcRequest.setGroup(rpcServiceProperties.getGroup());
         rpcRequest.setVersion(rpcServiceProperties.getVersion());
         RpcResponse<Object> rpcResponse = null;
-        Object obj = null;
+        //通过Socket传输
         if (clientTransport instanceof SocketRpcClient){
             logger.info("通过Socket传输数据");
             rpcResponse = (RpcResponse<Object>) clientTransport.sendRpcRequest(rpcRequest);
         }
+        //检查返回结果
+        RpcMessageChecker.check(rpcRequest , rpcResponse);
+        assert rpcResponse != null;
         return rpcResponse.getData();
     }
 }
