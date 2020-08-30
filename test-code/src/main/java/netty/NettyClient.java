@@ -76,6 +76,7 @@ public class NettyClient {
             Channel futureChannel = channelFuture.channel();
             log.info("准备发送消息给服务器端");
             if (futureChannel != null){
+                //发送消息
                 futureChannel.writeAndFlush(rpcRequest);
                 log.info("成功发送消息给服务器端" + rpcRequest);
                 //阻塞等待，直到Channel关闭
