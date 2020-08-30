@@ -72,7 +72,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        //等待超时
+        //服务端等待超时(30s)，关闭连接
         if (evt instanceof IdleState){
             IdleState state = ((IdleStateEvent) evt).state();
             if (state == IdleState.READER_IDLE){

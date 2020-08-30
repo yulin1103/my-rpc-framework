@@ -104,7 +104,7 @@ public class ServiceProviderImpl implements ServiceProvider{
             rpcServiceProperties.setServiceName(serviceName);
             //将服务添加到容器（服务名称、服务对象）
             this.addService(service , serviceRelatedInterface , rpcServiceProperties);
-            //将服务注册到注册中心
+            //将服务注册到注册中心(父节点：接口名称+group+version；子节点：IP+PORT)
             serviceRegistry.registryService(rpcServiceProperties.toRpcServiceName() , new InetSocketAddress(host , GlobalVariable.PORT));
         } catch (UnknownHostException e) {
             logger.error("获取本机IP地址失败（服务所在的地址）" , e);

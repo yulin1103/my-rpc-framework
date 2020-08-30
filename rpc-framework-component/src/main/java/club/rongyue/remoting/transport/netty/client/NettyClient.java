@@ -1,5 +1,7 @@
 package club.rongyue.remoting.transport.netty.client;
 
+import club.rongyue.enumeration.RpcErrorMessage;
+import club.rongyue.exception.RpcException;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -50,7 +52,7 @@ public class NettyClient {
                 });
     }
 
-    public Channel doConnect(InetSocketAddress inetSocketAddress) throws ExecutionException, InterruptedException {
+    public Channel doConnect(InetSocketAddress inetSocketAddress){
         CompletableFuture<Channel> completableFuture = new CompletableFuture<>();
         //4、启动客户端，连接服务端
         bootstrap.connect(inetSocketAddress).addListener(new ChannelFutureListener() {
@@ -64,7 +66,11 @@ public class NettyClient {
                 }
             }
         });
-        return completableFuture.get();
+        try {
+            return completableFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RpcException(RpcErrorMessage.CLIENT_CONNECT_SERVER_FAILURE);
+        }
     }
 
     public void close(){

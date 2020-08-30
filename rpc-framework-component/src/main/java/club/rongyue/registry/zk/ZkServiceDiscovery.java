@@ -30,6 +30,7 @@ public class ZkServiceDiscovery implements ServiceDiscovery {
         List<String> serviceAddressList = null;
         // 当路径不存在时，获取子节点将抛出 org.apache.zookeeper.KeeperException$NoNodeException 异常
         try {
+            // rpcServiceName == 接口名称+group+version
             serviceAddressList = CuratorUtils.getChildrenNodes(zkClient , rpcServiceName);
         } catch (Exception e) {
             //找不到这个服务
