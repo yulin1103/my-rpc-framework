@@ -44,7 +44,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 throw new RpcException(RpcErrorMessage.TRANSPORT_DATA_ERROR);
             }
             RpcRequest rpcRequest = (RpcRequest) msg;
-            if (rpcRequest.getRpcMessageType().equals(RpcMessageType.HEART_BEAT)){
+            if ((RpcMessageType.HEART_BEAT).equals(rpcRequest.getRpcMessageType())){
                 logger.info("心跳请求，不需要处理");
                 return;
             }
@@ -86,7 +86,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.info("netty Server捕获到异常");
+        logger.info("NettyServerHandler捕获到异常");
         cause.printStackTrace();
         ctx.close();
     }

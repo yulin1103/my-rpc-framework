@@ -5,6 +5,7 @@ import club.rongyue.remoting.dto.RpcMessageChecker;
 import club.rongyue.remoting.dto.RpcRequest;
 import club.rongyue.remoting.dto.RpcResponse;
 import club.rongyue.remoting.transport.ClientTransport;
+import club.rongyue.remoting.transport.netty.client.NettyClientTransport;
 import club.rongyue.remoting.transport.socket.SocketRpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 客户端代理类（封装远程调用的过程，使调用远程方法跟调用本地方法一样）
@@ -58,6 +60,13 @@ public class RpcClientProxy<T> implements InvocationHandler {
         if (clientTransport instanceof SocketRpcClient){
             logger.info("通过Socket传输数据");
             rpcResponse = (RpcResponse<Object>) clientTransport.sendRpcRequest(rpcRequest);
+        }
+        //使用netty传输
+        if (clientTransport instanceof NettyClientTransport){
+            logger.info("使用netty传输数据");
+            CompletableFuture<RpcResponse<Object>> future = ((NettyClientTransport) clientTransport).sendRpcRequest(rpcRequest);
+            //CompletableFuture的get()方法会一直阻塞直到 Future 完成
+            rpcResponse = future.get();
         }
         //检查返回结果
         RpcMessageChecker.check(rpcRequest , rpcResponse);

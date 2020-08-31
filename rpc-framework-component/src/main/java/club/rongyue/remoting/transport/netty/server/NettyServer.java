@@ -1,6 +1,15 @@
 package club.rongyue.remoting.transport.netty.server;
 
+import club.rongyue.provider.ServiceProvider;
+import club.rongyue.provider.ServiceProviderImpl;
+import club.rongyue.remoting.dto.RpcRequest;
+import club.rongyue.remoting.dto.RpcResponse;
+import club.rongyue.remoting.transport.Serializer;
+import club.rongyue.remoting.transport.netty.coder.NettyKryoDecoder;
+import club.rongyue.remoting.transport.netty.coder.NettyKryoEncoder;
+import club.rongyue.remoting.transport.serializer.KryoSerializerImpl;
 import club.rongyue.utils.GlobalVariable;
+import club.rongyue.utils.factories.SingletonFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -23,6 +32,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class NettyServer {
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
+    private final Serializer serializer = SingletonFactory.getInstance(KryoSerializerImpl.class);
+    private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
+
+    /**
+     * 注册服务（保存服务对象、向注册中心注册服务地址）
+     * @param service 服务对象
+     */
+    public void registryService(Object service){
+        serviceProvider.publishService(service);
+    }
+
 
     /**
      * 启动netty服务端
@@ -53,7 +73,11 @@ public class NettyServer {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             //30s之内没有收到客户端请求的话就关闭连接
                             ch.pipeline().addLast(new IdleStateHandler(30 , 0 , 0 , TimeUnit.SECONDS));
-                            //自定义处理器
+                            //自定义解码器
+                            ch.pipeline().addLast(new NettyKryoDecoder(serializer , RpcRequest.class));
+                            //自定义编码器
+                            ch.pipeline().addLast(new NettyKryoEncoder(serializer , RpcResponse.class));
+                            //自定义netty服务端处理器
                             ch.pipeline().addLast(new NettyServerHandler());
                         }
                     });

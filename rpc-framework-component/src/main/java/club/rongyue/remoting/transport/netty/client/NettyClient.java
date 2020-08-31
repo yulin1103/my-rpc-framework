@@ -2,6 +2,13 @@ package club.rongyue.remoting.transport.netty.client;
 
 import club.rongyue.enumeration.RpcErrorMessage;
 import club.rongyue.exception.RpcException;
+import club.rongyue.remoting.dto.RpcRequest;
+import club.rongyue.remoting.dto.RpcResponse;
+import club.rongyue.remoting.transport.Serializer;
+import club.rongyue.remoting.transport.netty.coder.NettyKryoDecoder;
+import club.rongyue.remoting.transport.netty.coder.NettyKryoEncoder;
+import club.rongyue.remoting.transport.serializer.KryoSerializerImpl;
+import club.rongyue.utils.factories.SingletonFactory;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -25,6 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class NettyClient {
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
+    private final Serializer serializer = SingletonFactory.getInstance(KryoSerializerImpl.class);
     private final Bootstrap bootstrap;
     private final EventLoopGroup eventLoopGroup;
 
@@ -47,7 +55,12 @@ public class NettyClient {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         //如果15秒之内没有发送数据给服务端的话，就发送一次心跳请求
                         ch.pipeline().addLast(new IdleStateHandler(0 , 5 , 0 , TimeUnit.SECONDS));
-
+                        //自定义编码器
+                        ch.pipeline().addLast(new NettyKryoEncoder(serializer , RpcRequest.class));
+                        //自定义解码器
+                        ch.pipeline().addLast(new NettyKryoDecoder(serializer , RpcResponse.class));
+                        //自定义netty客户端处理器
+                        ch.pipeline().addLast(new NettyClientHandler());
                     }
                 });
     }
